@@ -3,6 +3,7 @@
 A synchronous, dependency-free Python client for every `/api/v1` economy endpoint in this project. Requires Python 3.8 or newer.
 
 Install from the project root with `python -m pip install ./EAPY/py`, or add `EAPY/py` to `PYTHONPATH`.
+`python -m pip install git+https://github.com/aunnux/EconAPI.js.git@py`
 
 ## Use
 
@@ -10,11 +11,11 @@ Add `EAPY/py` to `PYTHONPATH`, then import the client:
 
 ```python
 import os
-from eapy import Client
+from econapipy import Client
 
 client = Client(
     os.environ["API_TOKEN"],
-    base_url="http://localhost:3000/api/v1",
+    base_url="https://api.aunn.us/api/v1",
 )
 
 balance = client.get_user_balance("guild-id", "user-id")
