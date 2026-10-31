@@ -7,7 +7,7 @@ A dependency-free Node.js client for every `/api/v1` economy endpoint in this pr
 The wrapper can be imported directly from this project:
 
 ```js
-import { Client } from "./EAPI/index.js";
+import { Client } from "econapi.js";
 
 const client = new Client(process.env.API_TOKEN, {
   baseURL: "http://api.aunn.us/api/v1"
