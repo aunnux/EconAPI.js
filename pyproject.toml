@@ -3,12 +3,12 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "eapy-wrapper"
+name = "econapipy"
 version = "1.0.0"
-description = "Python client for api.aunn.us economy API"
+description = "Python client for api.aunn.us"
 requires-python = ">=3.8"
 dependencies = []
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["eapy*"]
+include = ["econapipy*"]
