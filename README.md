@@ -10,7 +10,7 @@ The wrapper can be imported directly from this project:
 import { Client } from "econapi.js";
 
 const client = new Client(process.env.API_TOKEN, {
-  baseURL: "http://api.aunn.us/api/v1"
+  baseURL: "https://api.aunn.us/api/v1"
 });
 
 const balance = await client.getUserBalance("guild-id", "user-id");
