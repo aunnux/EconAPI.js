@@ -1,50 +1,54 @@
-# EAPI Node.js wrapper
+# EAPY Python wrapper
 
-A dependency-free Node.js client for every `/api/v1` economy endpoint in this project. Requires Node.js 18 or newer.
+A synchronous, dependency-free Python client for every `/api/v1` economy endpoint in this project. Requires Python 3.8 or newer.
 
-## Install and use
+Install from the project root with `python -m pip install ./EAPY/py`, or add `EAPY/py` to `PYTHONPATH`.
 
-The wrapper can be imported directly from this project:
+## Use
 
-```js
-import { Client } from "econapi.js";
+Add `EAPY/py` to `PYTHONPATH`, then import the client:
 
-const client = new Client(process.env.API_TOKEN, {
-  baseURL: "https://api.aunn.us/api/v1"
-});
+```python
+import os
+from eapy import Client
 
-const balance = await client.getUserBalance("guild-id", "user-id");
-console.log(balance);
+client = Client(
+    os.environ["API_TOKEN"],
+    base_url="http://localhost:3000/api/v1",
+)
+
+balance = client.get_user_balance("guild-id", "user-id")
+print(balance)
 ```
 
-Create an API token in the dashboard and pass it to the client. The client sends the token unchanged in the `Authorization` header; do not prepend `Bearer`. The server validates the key and project scope on every request.
+Create a token in the dashboard and pass it to `Client`. The client sends the API token unchanged in the `Authorization` header; do not prepend `Bearer`. The server validates the key and project scope on every request.
 
-`baseURL` defaults to `http://api.aunn.us/api/v1`. Requests through one client instance are serialized, and the client observes the server's `X-RateLimit-Remaining` and `X-RateLimit-Reset` headers before sending the next request. HTTP 429 responses are retried up to `maxRetries` times (default `3`), waiting for the server-provided `retry_after` duration. Other non-success responses throw `APIError`, which includes `status`, `body`, and response `headers`.
+`base_url` defaults to `http://localhost:3000/api/v1`. Requests made through one client instance are serialized. The client observes `X-RateLimit-Remaining` and `X-RateLimit-Reset`, waits before sending after the remaining request count reaches zero, and retries HTTP 429 responses up to `max_retries` times (default `3`) using the response's `retry_after` value. Other non-success responses raise `APIError`, with `status`, `body`, and response `headers` attributes.
 
 ## Methods
 
 | Method | Endpoint operation |
 | --- | --- |
-| `getGuild(guildId)` | Get guild metadata |
-| `getApplicationPermission(guildId)` | Get application permissions |
-| `getGuildLeaderboard(guildId, options?)` | List leaderboard balances |
-| `getUserBalance(guildId, userId)` | Get a balance |
-| `editUserBalance(guildId, userId, balance)` | Increment balance fields |
-| `setUserBalance(guildId, userId, balance)` | Set balance fields |
-| `getItems(guildId, options?)` | List store items |
-| `createItem(guildId, item)` | Create a store item |
-| `getItem(guildId, itemId)` | Get a store item |
-| `editItem(guildId, itemId, data, options?)` | Edit a store item |
-| `deleteItem(guildId, itemId, options?)` | Delete a store item |
-| `getInventoryItems(guildId, userId, options?)` | List inventory items |
-| `addInventoryItem(guildId, userId, itemId, quantity?, options?)` | Add inventory quantity |
-| `getInventoryItem(guildId, userId, itemId)` | Get an inventory item |
-| `removeInventoryItem(guildId, userId, itemId, quantity?)` | Remove quantity or the whole entry |
-| `getItemCategories(guildId)` | List categories |
-| `createItemCategory(guildId, category)` | Create a category |
-| `editItemCategory(guildId, categoryId, data)` | Edit a category |
-| `deleteItemCategory(guildId, categoryId)` | Delete a category |
+| `get_guild(guild_id)` | Get guild metadata |
+| `get_application_permission(guild_id)` | Get application permissions |
+| `get_guild_leaderboard(guild_id, options=None)` | List leaderboard balances |
+| `get_user_balance(guild_id, user_id)` | Get a balance |
+| `edit_user_balance(guild_id, user_id, balance)` | Increment balance fields |
+| `set_user_balance(guild_id, user_id, balance)` | Set balance fields |
+| `get_items(guild_id, options=None)` | List store items |
+| `create_item(guild_id, item)` | Create a store item |
+| `get_item(guild_id, item_id)` | Get a store item |
+| `edit_item(guild_id, item_id, data, cascade_update=None)` | Edit a store item |
+| `delete_item(guild_id, item_id, cascade_update=None)` | Delete a store item |
+| `get_inventory_items(guild_id, user_id, options=None)` | List inventory items |
+| `add_inventory_item(guild_id, user_id, item_id, quantity=1, options=None)` | Add inventory quantity |
+| `get_inventory_item(guild_id, user_id, item_id)` | Get an inventory item |
+| `remove_inventory_item(guild_id, user_id, item_id, quantity=None)` | Remove quantity or the whole entry |
+| `get_item_categories(guild_id)` | List categories |
+| `create_item_category(guild_id, category)` | Create a category |
+| `edit_item_category(guild_id, category_id, data)` | Edit a category |
+| `delete_item_category(guild_id, category_id)` | Delete a category |
 
-List methods accept `limit`, `page`, `sort`, and `query` as applicable. The leaderboard also accepts `offset`; `sort` may be a string or an array of sort fields.
+List `options` may contain `limit`, `page`, `sort`, and `query`; leaderboard options may also contain `offset`. Use snake_case API fields in item/category data and inventory `options` (`inventory_user_id` and `ignore_max_quantity`). `cascade_update=True` maps to the endpoints' `?boolean=true` option.
 
-Item and category payloads use the API's snake_case fields. `editItem` and `deleteItem` accept `{ cascadeUpdate: true }` to pass the API's `?boolean=true` option. `addInventoryItem` accepts `{ inventoryUserId, ignoreMaxQuantity }`, mapped to the API's `inventory_user_id` and `ignore_max_quantity` fields.
+Run the wrapper tests from this directory with `python -m unittest discover -s tests`.
