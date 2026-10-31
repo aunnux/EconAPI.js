@@ -1,7 +1,7 @@
 {
-  "name": "eapi-node-wrapper",
+  "name": "econapi.js",
   "version": "1.0.0",
-  "description": "Node.js client for app.aunn.us economy API",
+  "description": "Node.js client for api.aunn.us economy API",
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",

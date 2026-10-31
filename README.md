@@ -10,7 +10,7 @@ The wrapper can be imported directly from this project:
 import { Client } from "./EAPI/index.js";
 
 const client = new Client(process.env.API_TOKEN, {
-  baseURL: "http://localhost:3000/api/v1"
+  baseURL: "http://api.aunn.us/api/v1"
 });
 
 const balance = await client.getUserBalance("guild-id", "user-id");
@@ -19,7 +19,7 @@ console.log(balance);
 
 Create an API token in the dashboard and pass it to the client. The client sends the token unchanged in the `Authorization` header; do not prepend `Bearer`. The server validates the key and project scope on every request.
 
-`baseURL` defaults to `http://localhost:3000/api/v1`. Requests through one client instance are serialized, and the client observes the server's `X-RateLimit-Remaining` and `X-RateLimit-Reset` headers before sending the next request. HTTP 429 responses are retried up to `maxRetries` times (default `3`), waiting for the server-provided `retry_after` duration. Other non-success responses throw `APIError`, which includes `status`, `body`, and response `headers`.
+`baseURL` defaults to `http://api.aunn.us/api/v1`. Requests through one client instance are serialized, and the client observes the server's `X-RateLimit-Remaining` and `X-RateLimit-Reset` headers before sending the next request. HTTP 429 responses are retried up to `maxRetries` times (default `3`), waiting for the server-provided `retry_after` duration. Other non-success responses throw `APIError`, which includes `status`, `body`, and response `headers`.
 
 ## Methods
 
